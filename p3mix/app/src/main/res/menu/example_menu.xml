@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/credits"
+        android:title="Credits"></item>
+    <!--<group android:id="@+id/group">
+        <item android:id="@+id/group_item1"
+            android:onClick="onGroupItemClick"
+            android:title="titulo"></item>
+
+        <item android:id="@+id/group_item2"
+            android:onClick="onGroupItemClick"
+            android:title="titulo"></item>
+    </group>-->
+</menu>

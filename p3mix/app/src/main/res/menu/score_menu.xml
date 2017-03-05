@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/borra"
-        android:title="Borrar"></item>
+        android:title="Borrar BD"></item>
     <item android:id="@+id/refresh"
         android:title="Refresh"></item>
     <item android:id="@+id/refreshbd"

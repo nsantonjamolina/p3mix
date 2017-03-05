@@ -1,9 +1,12 @@
 package com.example.ignaciosantonjamolina.p3;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +19,16 @@ import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,15 +44,20 @@ public class PlayActivity extends AppCompatActivity {
             "1000", "2000", "4000", "8000", "16000", "32000", "64000",
             "125000", "250000", "500000", "1000000"};
     Question q = null;
-    List<Question> QuestionList;
+    List<Question> questionList;
+
+    SharedPreferences prefs;
 
     Button buttonAnswer1;
     Button buttonAnswer2;
     Button buttonAnswer3;
     Button buttonAnswer4;
+    Button buttonPlay;
+    Button buttonQuit;
     TextView euros;
     TextView numberQ;
     TextView quesionText;
+
     String amount;  // dinero conseguido
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,52 +75,51 @@ public class PlayActivity extends AppCompatActivity {
                 Log.i("ActionBar", "fifty");
                 switch (Integer.parseInt(q.getFifty1())) {
                     case 1:
-                        buttonAnswer1.setClickable(false);
+                        buttonAnswer1.setVisibility(View.INVISIBLE);
                         buttonAnswer1.setBackgroundColor(0xFFFFFFFF); // blanco
                         break;
                     case 2:
-                        buttonAnswer2.setClickable(false);
+                        buttonAnswer2.setVisibility(View.INVISIBLE);
                         buttonAnswer1.setBackgroundColor(0xFFFFFFFF);
                         break;
                     case 3:
-                        buttonAnswer3.setClickable(false);
+                        buttonAnswer3.setVisibility(View.INVISIBLE);
                         buttonAnswer1.setBackgroundColor(0xFFFFFFFF);
                         break;
                     case 4:
-                        buttonAnswer4.setClickable(false);
+                        buttonAnswer4.setVisibility(View.INVISIBLE);
                         buttonAnswer1.setBackgroundColor(0xFFFFFFFF);
                         break;
                 }
                 switch (Integer.parseInt(q.getFifty2())) {
                     case 1:
-                        buttonAnswer1.setClickable(false);
+                        buttonAnswer1.setVisibility(View.INVISIBLE);
                         buttonAnswer1.setBackgroundColor(0xFFFFFFFF);
                         break;
                     case 2:
-                        buttonAnswer2.setClickable(false);
+                        buttonAnswer2.setVisibility(View.INVISIBLE);
                         buttonAnswer2.setBackgroundColor(0xFFFFFFFF);
                         break;
                     case 3:
-                        buttonAnswer3.setClickable(false);
+                        buttonAnswer3.setVisibility(View.INVISIBLE);
                         buttonAnswer3.setBackgroundColor(0xFFFFFFFF);
                         break;
                     case 4:
-                        buttonAnswer4.setClickable(false);
+                        buttonAnswer4.setVisibility(View.INVISIBLE);
                         buttonAnswer4.setBackgroundColor(0xFFFFFFFF);
                         break;
                 }
                 break;
-            case R.id.abandon:
-                amount = prize[qn];
-                addScore(Integer.parseInt(amount));
-                break;
+
             case R.id.audience:
                 changeButtonColor(Integer.parseInt(q.getPhone()),0xFFFFFF00); //yellow
                 break;
+
             case R.id.call:
                 changeButtonColor(Integer.parseInt(q.getPhone()),0xFFFF9900); //orange
                 break;
             //return super.onOptionsItemSelected(item);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -110,6 +127,7 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefs = this.getPreferences(Context.MODE_PRIVATE);
 
         /*
         This method is executed when the activity is created to populate the ActionBar with actions
@@ -124,23 +142,34 @@ public class PlayActivity extends AppCompatActivity {
         buttonAnswer2 = (Button) findViewById(R.id.answer2);
         buttonAnswer3 = (Button) findViewById(R.id.answer3);
         buttonAnswer4 = (Button) findViewById(R.id.answer4);
+        buttonPlay = (Button) findViewById(R.id.play);
+        buttonQuit = (Button) findViewById(R.id.quit);
 
         euros = (TextView) findViewById(R.id.euros);
         numberQ = (TextView) findViewById(R.id.numberQ);
         quesionText = (TextView) findViewById(R.id.questionText);
 
-        QuestionList = generateQuestionList();
+
+        questionList = generateQuestionList();
+
+
+        for (int i=0; i<questionList.size(); i++)
+            Log.d("XXXX", questionList.get(i).getText());
 
         qn = 1;
 
         euros.setText(prize[qn]);
         numberQ.setText(String.valueOf(qn));
-        q = QuestionList.get(qn - 1);
+        q = questionList.get(qn-1);
         quesionText.setText(q.getText());
         buttonAnswer1.setText(q.getAnswer1());
         buttonAnswer2.setText(q.getAnswer2());
         buttonAnswer3.setText(q.getAnswer3());
         buttonAnswer4.setText(q.getAnswer4());
+
+        buttonPlay.setVisibility(View.INVISIBLE);
+        buttonQuit.setVisibility(View.INVISIBLE);
+
     }
 
 
@@ -164,27 +193,39 @@ public class PlayActivity extends AppCompatActivity {
         else fallo();
     }
 
+    public void clickPlay(View view) {
+        qn++;
+        euros.setText(prize[qn]);
+        numberQ.setText(Integer.toString(qn));
+        q = questionList.get(qn -1);
+        quesionText.setText(q.getText());
+        resetButtons();
+        buttonAnswer1.setText(q.getAnswer1());
+        buttonAnswer2.setText(q.getAnswer2());
+        buttonAnswer3.setText(q.getAnswer3());
+        buttonAnswer4.setText(q.getAnswer4());
+        buttonPlay.setVisibility(View.INVISIBLE);
+        buttonQuit.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void clickQuit(View view) {
+
+        amount = prize[qn];
+        addScore(Integer.parseInt(amount));
+        finish();
+    }
+
     void acierto(int button) {
 
-         resetButtons();
+        buttonPlay.setVisibility(View.VISIBLE);
+        buttonQuit.setVisibility(View.VISIBLE);
 
+        changeButtonColor(button, Color.GREEN);
         if (qn == prize.length - 1) {
-            qn = 1;
             amount = "1000000";
             addScore(Integer.parseInt(amount));
-
-        } else {
-            // sigo jugando
-            qn++;
-            euros.setText(prize[qn]);
-            numberQ.setText(Integer.toString(qn));
-            q = QuestionList.get(qn - 1);
-            quesionText.setText(q.getText());
-
-            buttonAnswer1.setText(q.getAnswer1());
-            buttonAnswer2.setText(q.getAnswer2());
-            buttonAnswer3.setText(q.getAnswer3());
-            buttonAnswer4.setText(q.getAnswer4());
+            finish();
         }
     }
 
@@ -192,9 +233,8 @@ public class PlayActivity extends AppCompatActivity {
         amount = "0";
         if (qn >= 6) amount = "1000";
         if (qn >= 11) amount = "32000";
-        resetButtons();
-        qn = 1;
         addScore(Integer.parseInt(amount));
+        finish();
     }
 
     private void changeButtonColor(int button, int color){
@@ -212,7 +252,6 @@ public class PlayActivity extends AppCompatActivity {
                 buttonAnswer4.setBackgroundColor(color);
                 break;
         }
-
     }
 
     private void resetButtons() {
@@ -222,249 +261,74 @@ public class PlayActivity extends AppCompatActivity {
         buttonAnswer3.setBackgroundColor(0xFFDDDDDD);
         buttonAnswer4.setBackgroundColor(0xFFDDDDDD);
 
-        buttonAnswer1.setClickable(true);
-        buttonAnswer2.setClickable(true);
-        buttonAnswer3.setClickable(true);
-        buttonAnswer4.setClickable(true);
+        buttonAnswer1.setVisibility(View.VISIBLE);
+        buttonAnswer2.setVisibility(View.VISIBLE);
+        buttonAnswer3.setVisibility(View.VISIBLE);
+        buttonAnswer4.setVisibility(View.VISIBLE);
     }
+
+
+
+
+
 
     public List<Question> generateQuestionList() {
+
         List<Question> list = new ArrayList<Question>();
-        Question q = null;
 
-        q = new Question(
-                "1",
-                "Which is the Sunshine State of the US?",
-                "North Carolina",
-                "Florida",
-                "Texas",
-                "Arizona",
-                "2",
-                "2",
-                "2",
-                "1",
-                "4"
-        );
-        list.add(q);
 
-        q = new Question(
-                "2",
-                "Which of these is not a U.S. state?",
-                "New Hampshire",
-                "Washington",
-                "Wyoming",
-                "Manitoba",
-                "4",
-                "4",
-                "4",
-                "2",
-                "3"
-        );
-        list.add(q);
+        try {
+            InputStream fis = getResources().openRawResource(R.raw.questions);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+            parser.setInput(reader);
+            int eventType = parser.getEventType();
+            EditText target = null;
+int i=0;
+             while (eventType != XmlPullParser.END_DOCUMENT) {
+                Question qu = new Question();
+                if (eventType== XmlPullParser.START_TAG)
+                        if ("question".equals(parser.getName())) {
+                           qu.answer1 =    parser.getAttributeValue(null, "answer1");
+                           qu.answer2 =    parser.getAttributeValue(null, "answer2");
+                           qu.answer3 =    parser.getAttributeValue(null, "answer3");
+                           qu.answer4 =    parser.getAttributeValue(null, "answer4");
+                           qu.audience=    parser.getAttributeValue(null, "audience");
+                           qu.fifty1  =    parser.getAttributeValue(null, "fifty1");
+                           qu.fifty2  =    parser.getAttributeValue(null, "fifty2");
+                           qu.number  =    parser.getAttributeValue(null, "number");
+                           qu.phone   =    parser.getAttributeValue(null, "phone");
+                           qu.right   =    parser.getAttributeValue(null, "right");
+                           qu.text    =    parser.getAttributeValue(null, "text");
+                           list.add(qu);
+                }
+                 parser.next();
+                 eventType = parser.getEventType();
+            }
+            reader.close();
+        }
+        catch(XmlPullParserException e){
+            e.printStackTrace();
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
 
-        q = new Question(
-                "3",
-                "What is Book 3 in the Pokemon book series?",
-                "Charizard",
-                "Island of the Giant Pokemon",
-                "Attack of the Prehistoric Pokemon",
-                "I Choose You!",
-                "3",
-                "2",
-                "3",
-                "1",
-                "4"
-        );
-        list.add(q);
-
-        q = new Question(
-                "4",
-                "Who was forced to sign the Magna Carta?",
-                "King John",
-                "King Henry VIII",
-                "King Richard the Lion-Hearted",
-                "King George III",
-                "1",
-                "3",
-                "1",
-                "2",
-                "3"
-        );
-        list.add(q);
-
-        q = new Question(
-                "5",
-                "Which ship was sunk in 1912 on its first voyage, although people said it would never sink?",
-                "Monitor",
-                "Royal Caribean",
-                "Queen Elizabeth",
-                "Titanic",
-                "4",
-                "4",
-                "4",
-                "1",
-                "2"
-        );
-        list.add(q);
-
-        q = new Question(
-                "6",
-                "Who was the third James Bond actor in the MGM films? (Do not include &apos;Casino Royale&apos;.)",
-                "Roger Moore",
-                "Pierce Brosnan",
-                "Timothy Dalton",
-                "Sean Connery",
-                "1",
-                "3",
-                "3",
-                "2",
-                "3"
-        );
-        list.add(q);
-
-        q = new Question(
-                "7",
-                "Which is the largest toothed whale?",
-                "Humpback Whale",
-                "Blue Whale",
-                "Killer Whale",
-                "Sperm Whale",
-                "4",
-                "2",
-                "2",
-                "2",
-                "3"
-        );
-        list.add(q);
-
-        q = new Question(
-                "8",
-                "In what year was George Washington born?",
-                "1728",
-                "1732",
-                "1713",
-                "1776",
-                "2",
-                "2",
-                "2",
-                "1",
-                "4"
-        );
-        list.add(q);
-
-        q = new Question(
-                "9",
-                "Which of these rooms is in the second floor of the White House?",
-                "Red Room",
-                "China Room",
-                "State Dining Room",
-                "East Room",
-                "2",
-                "2",
-                "2",
-                "3",
-                "4"
-        );
-        list.add(q);
-
-        q = new Question(
-                "10",
-                "Which Pope began his reign in 963?",
-                "Innocent III",
-                "Leo VIII",
-                "Gregory VII",
-                "Gregory I",
-                "2",
-                "1",
-                "2",
-                "3",
-                "4"
-        );
-        list.add(q);
-
-        q = new Question(
-                "11",
-                "What is the second longest river in South America?",
-                "Parana River",
-                "Xingu River",
-                "Amazon River",
-                "Rio Orinoco",
-                "1",
-                "1",
-                "1",
-                "2",
-                "3"
-        );
-        list.add(q);
-
-        q = new Question(
-                "12",
-                "What Ford replaced the Model T?",
-                "Model U",
-                "Model A",
-                "Edsel",
-                "Mustang",
-                "2",
-                "4",
-                "4",
-                "1",
-                "3"
-        );
-        list.add(q);
-
-        q = new Question(
-                "13",
-                "When was the first picture taken?",
-                "1860",
-                "1793",
-                "1912",
-                "1826",
-                "4",
-                "4",
-                "4",
-                "1",
-                "3"
-        );
-        list.add(q);
-
-        q = new Question(
-                "14",
-                "Where were the first Winter Olympics held?",
-                "St. Moritz, Switzerland",
-                "Stockholm, Sweden",
-                "Oslo, Norway",
-                "Chamonix, France",
-                "4",
-                "1",
-                "4",
-                "2",
-                "3"
-        );
-        list.add(q);
-
-        q = new Question(
-                "15",
-                "Which of these is not the name of a New York tunnel?",
-                "Brooklyn-Battery",
-                "Lincoln",
-                "Queens Midtown",
-                "Manhattan",
-                "4",
-                "4",
-                "4",
-                "1",
-                "3"
-        );
-        list.add(q);
 
         return list;
+
     }
+
 
     public void addScore(int amount){
         //SettingsActivity.et
         //EditText etName = (EditText)findViewById(R.id.etName);
        // String name = etName.toString();
-         String name = "Paquito";
+
+        String name = prefs.getString("nombre", "Alias");
         try {
             PuntuacionesSQLiteHelper.getInstance(this).addScore(name, amount);
         } catch(SQLiteException e){
@@ -473,5 +337,41 @@ public class PlayActivity extends AppCompatActivity {
 
     }
 
+/*
+private void readQuestionXML() {
+    try {
+        FileInputStream fis = openFileInput("Question.xml");
+        InputStreamReader reader = new InputStreamReader(fis);
+        Log.d("XXXXXXXXXXXXXXXXXX", "READQUESTION");
+        XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+        parser.setInput(reader);
+        int eventType = parser.getEventType();
+        EditText target = null;
+   //     while (eventType != XmlPullParser.END_DOCUMENT) {
+            switch (eventType) {
+                case XmlPullParser.START_TAG:
+                    if ("answer1".equals(parser.getName())) {
+                        Log.d("xml", String.format("answer1", parser.getAttributeValue(null, "Answer1")));
+                    }
+                    break;
+                case XmlPullParser.TEXT:
+                    Log.d("text", parser.getText());
+                    break;
+            }
+            parser.next();
+            eventType = parser.getEventType();
+     //   }
+        reader.close();
+    } catch (XmlPullParserException e) {
+        e.printStackTrace();
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+*/
+
 
 }
+

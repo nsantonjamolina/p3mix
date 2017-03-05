@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
+      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-    <TextView
-        android:text="@string/pay_for"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/playfor" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:id="@+id/euros" />
-
-    <TextView
-        android:text="@string/question_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/question_number"
-        android:gravity="right" />
+        android:orientation="horizontal">
 
         <TextView
-            android:text="TextView"
+            android:id="@+id/playfor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pay_for" />
+
+        <TextView
+            android:id="@+id/euros"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/numberQ"
-            android:gravity="right" />
-    </LinearLayout>
+            android:layout_weight="3"
+            android:text="100" />
 
+        <TextView
+            android:id="@+id/question_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/question_number" />
+
+        <TextView
+            android:id="@+id/numberQ"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:text="1" />
+
+    </LinearLayout>
 
 
     <Space
@@ -45,44 +46,71 @@
         android:layout_height="10dp" />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/questionText"
-        android:textSize="18sp"
-        android:textColor="@color/colorAccent" />
-
-    <Button
-        android:text="@string/answer1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="clickAnswer1"
+        android:text=""
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <Button
         android:id="@+id/answer1"
-        android:elevation="15dp"
-        android:layout_margin="20px" />
-
-    <Button
-        android:text="@string/answer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="clickAnswer2"
+        android:layout_margin="20dp"
+        android:onClick="clickAnswer1"
+        android:text="@string/answer1" />
+
+    <Button
         android:id="@+id/answer2"
-        android:paddingBottom="20px"
-        android:layout_margin="20px" />
-
-    <Button
-        android:text="@string/answer3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="clickAnswer3"
+        android:layout_margin="20dp"
+        android:onClick="clickAnswer2"
+        android:paddingBottom="20dp"
+        android:text="@string/answer2" />
+
+    <Button
         android:id="@+id/answer3"
-        android:layout_margin="20px" />
-
-    <Button
-        android:text="@string/answer4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="clickAnswer4"
+        android:layout_margin="20dp"
+        android:onClick="clickAnswer3"
+        android:text="@string/answer3" />
+
+    <Button
         android:id="@+id/answer4"
-        android:layout_margin="20px" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:onClick="clickAnswer4"
+        android:text="@string/answer4" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/play"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:backgroundTint="@android:color/holo_green_light"
+        android:onClick="clickPlay"
+        android:text="@string/next"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/quit"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:onClick="clickQuit"
+        android:text="@string/quit" />
+
+</LinearLayout>
+
 </LinearLayout>

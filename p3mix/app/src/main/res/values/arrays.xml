@@ -6,4 +6,15 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+
+    <!--The HTTP method used to request a new quotation-->
+    <string-array name="http_method_array">
+        <item>GET</item>
+        <item>POST</item>
+    </string-array>
+    <!--The code related to each of the previous methods-->
+    <string-array name="http_method_values_array">
+        <item>GET</item>
+        <item>POST</item>
+    </string-array>
 </resources>

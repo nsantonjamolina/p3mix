@@ -1,4 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/borra"
         android:title="Borrar"></item>
+    <item android:id="@+id/refresh"
+        android:title="Refresh"></item>
+    <item android:id="@+id/refreshbd"
+        android:title="Refresh Scores"></item>
 </menu>

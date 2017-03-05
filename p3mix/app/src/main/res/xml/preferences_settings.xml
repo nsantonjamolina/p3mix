@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/category_web_service">
+        <ListPreference
+            android:defaultValue="GET"
+            android:entries="@array/http_method_array"
+            android:entryValues="@array/http_method_values_array"
+            android:key="prefs_http_method"
+            android:summary="@string/preference_http_method_summary"
+            android:title="@string/preference_http_method" />
+    </PreferenceCategory>
+</PreferenceScreen>

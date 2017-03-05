@@ -44,7 +44,7 @@ public class PuntuacionesSQLiteHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int versionAnterior, int versionNueva) {
 
         //Se elimina la versión anterior de la tabla
-        db.execSQL("DROP TABLE IF EXISTS Usuarios");
+        db.execSQL("DROP TABLE IF EXISTS Puntuaciones");
 
         //Se crea la nueva versión de la tabla
         db.execSQL(sqlCreate);

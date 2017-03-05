@@ -2,6 +2,7 @@ package com.example.ignaciosantonjamolina.p3;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
@@ -36,11 +37,16 @@ public class ScoreActivity  extends AppCompatActivity {
     List<Score> list;
     // Holds reference to the asynchronous task that gets scores from the web service
     GetScoresAsyncTask task;
+    SharedPreferences prefs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
+
+        prefs = this.getPreferences(Context.MODE_WORLD_READABLE);
+        fillTV();
 
         // Class for accessing an application's resources.
         Resources res = getResources();
@@ -51,77 +57,15 @@ public class ScoreActivity  extends AppCompatActivity {
         TabHost.TabSpec spec=tabs.newTabSpec("mitab1");
         spec.setContent(R.id.tab1);
         spec.setIndicator("Local");
-        //res.getDrawable(android.R.drawable.ic_btn_speak_now, ));
 
         tabs.addTab(spec);
 
         spec=tabs.newTabSpec("mitab2");
         spec.setContent(R.id.tab2);
         spec.setIndicator("Friends");
-        //res.getDrawable(android.R.drawable.ic_dialog_map, ));
         tabs.addTab(spec);
 
         tabs.setCurrentTab(0);
-
-/*        final TextView a = (TextView)findViewById(R.id.a);
-        String nombreScore1 = a.getText().toString();
-        nombreScore1 = "Nacho San";
-        a.setText(nombreScore1);
-
-        final TextView b = (TextView)findViewById(R.id.b);
-        String scoreNombre1 = b.getText().toString();
-        scoreNombre1 = "3000";
-        b.setText(scoreNombre1);
-
-        final TextView c = (TextView)findViewById(R.id.c);
-        String nombreScore2 = c.getText().toString();
-        nombreScore2 = "Ignatius";
-        c.setText(nombreScore2);
-
-        final TextView d = (TextView)findViewById(R.id.d);
-        String scoreNombre2 = d.getText().toString();
-        scoreNombre2 = "6000";
-        d.setText(scoreNombre2);
-
-        final TextView e = (TextView)findViewById(R.id.e);
-        String nombreScore3 = e.getText().toString();
-        nombreScore3 = "Nacho Xan";
-        e.setText(nombreScore3);
-
-        final TextView f = (TextView)findViewById(R.id.f);
-        String scoreNombre3 = f.getText().toString();
-        scoreNombre3 = "9000";
-        f.setText(scoreNombre3);*/
-
-//        final TextView aa = (TextView)findViewById(R.id.aa);
-//        String nombreScore11 = a.getText().toString();
-//        nombreScore1 = "Nacho San";
-//        a.setText(nombreScore1);
-//
-//        final TextView bb = (TextView)findViewById(R.id.bb);
-//        String scoreNombre11 = b.getText().toString();
-//        scoreNombre1 = "3000";
-//        b.setText(scoreNombre1);
-//
-//        final TextView cc = (TextView)findViewById(R.id.cc);
-//        String nombreScore22 = c.getText().toString();
-//        nombreScore2 = "Ignatius";
-//        c.setText(nombreScore2);
-//
-//        final TextView dd = (TextView)findViewById(R.id.dd);
-//        String scoreNombre22 = d.getText().toString();
-//        scoreNombre2 = "6000";
-//        d.setText(scoreNombre2);
-//
-//        final TextView ee = (TextView)findViewById(R.id.ee);
-//        String nombreScore33 = e.getText().toString();
-//        nombreScore3 = "Nacho Xan";
-//        e.setText(nombreScore3);
-//
-//        final TextView ff = (TextView)findViewById(R.id.ff);
-//        String scoreNombre33 = f.getText().toString();
-//        scoreNombre3 = "9000";
-//        f.setText(scoreNombre3);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -131,8 +75,6 @@ public class ScoreActivity  extends AppCompatActivity {
         // Generate the Menu object from the XML resource file
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.score_menu, menu);
-        importBD();
-        fillTV();
         return true;
     }
 
@@ -140,52 +82,16 @@ public class ScoreActivity  extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.borra:
-                if(borralinea == 0) {
-                    invalidateOptionsMenu();
-                    final TextView f = (TextView) findViewById(R.id.f);
-                    final TextView e = (TextView) findViewById(R.id.e);
-                    f.setText(borrado); e.setText(borrado);
-                    borralinea++;
-                    return true;
-                } else if (borralinea == 1){
-                    final TextView c = (TextView) findViewById(R.id.c);
-                    final TextView d = (TextView) findViewById(R.id.d);
-                    c.setText(borrado); d.setText(borrado);
-                    borralinea++;
-                    return true;
-                } else if (borralinea == 2) {
-                    final TextView b = (TextView) findViewById(R.id.b);
-                    final TextView a = (TextView) findViewById(R.id.a);
-                    b.setText(borrado);
-                    a.setText(borrado);
-                    borralinea++;
-                    return true;
-                } else {
-                    Toast.makeText(this, "No hay más puntuaciones", Toast.LENGTH_SHORT).show();
-                }
 
+                PuntuacionesSQLiteHelper.getInstance(this).clearAllScores();
+                list.clear();
+                return true;
 
             case R.id.refreshbd:
 
-                try {
-                    list= PuntuacionesSQLiteHelper.getInstance(this).getScores();
-                } catch (SQLiteException e) {
-                    e.printStackTrace();
-                }
-
-                final TextView a = (TextView)findViewById(R.id.a);
-                final TextView b = (TextView)findViewById(R.id.b);
-                Score s = list.get(elementobd);
-                //a.setText(s.getName());
-                a.setText("Desde ScoreActivity");
-                b.setText(s.getScore()+"");
-
-                elementobd++;
+                elementobd=0;
+                fillTV();
                 return true;
-
-
-
-
 
             case R.id.refresh:
                 // Check if the connection is available
@@ -213,10 +119,6 @@ public class ScoreActivity  extends AppCompatActivity {
 
                 // The action was successfully resolved
                 return true;
-
-            case R.id.bAddFriend:
-
-
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -266,33 +168,105 @@ public class ScoreActivity  extends AppCompatActivity {
         return ((info != null) && info.isConnected());
     }
 
-    public void importBD(){
+    public void fillTV(){
 
         try {
             list= PuntuacionesSQLiteHelper.getInstance(this).getScores();
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
-    }
-
-    public void fillTV(){
-
-        final TextView a = (TextView)findViewById(R.id.a);
-        final TextView b = (TextView)findViewById(R.id.b);
-        Score s = list.get(elementobd);
-        a.setText(s.getName());
-        b.setText(s.getScore()+"");
-        elementobd++;
-        final TextView c = (TextView)findViewById(R.id.c);
-        final TextView d = (TextView)findViewById(R.id.d);
-        s = list.get(elementobd);
-        c.setText(s.getName());
-        d.setText(s.getScore()+"");
-        elementobd++;
-        final TextView e = (TextView)findViewById(R.id.e);
-        final TextView f = (TextView)findViewById(R.id.f);
-        s = list.get(elementobd);
-        e.setText(s.getName());
-        f.setText(s.getScore()+"");
-    }
+        if(!list.isEmpty()){
+            if(elementobd==0 && elementobd<list.size()){
+                final TextView a = (TextView)findViewById(R.id.a);
+                final TextView b = (TextView)findViewById(R.id.b);
+                Score s = list.get(elementobd);
+                a.setText(s.getName());
+                b.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 1 && elementobd<list.size()){
+                final TextView c = (TextView)findViewById(R.id.c);
+                final TextView d = (TextView)findViewById(R.id.d);
+                Score s = list.get(elementobd);
+                c.setText(s.getName());
+                d.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 2 && elementobd<list.size()){
+                final TextView e = (TextView)findViewById(R.id.e);
+                final TextView f = (TextView)findViewById(R.id.f);
+                Score s = list.get(elementobd);
+                e.setText(s.getName());
+                f.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd==3 && elementobd<list.size()){
+                final TextView g = (TextView)findViewById(R.id.g);
+                final TextView h = (TextView)findViewById(R.id.h);
+                Score s = list.get(elementobd);
+                g.setText(s.getName());
+                h.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 4 && elementobd<list.size()){
+                final TextView i = (TextView)findViewById(R.id.i);
+                final TextView j = (TextView)findViewById(R.id.j);
+                Score s = list.get(elementobd);
+                i.setText(s.getName());
+                j.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 5 && elementobd<list.size()){
+                final TextView k = (TextView)findViewById(R.id.k);
+                final TextView l = (TextView)findViewById(R.id.l);
+                Score s = list.get(elementobd);
+                k.setText(s.getName());
+                l.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd==6 && elementobd<list.size()){
+                final TextView m = (TextView)findViewById(R.id.m);
+                final TextView n = (TextView)findViewById(R.id.n);
+                Score s = list.get(elementobd);
+                m.setText(s.getName());
+                n.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 7 && elementobd<list.size()){
+                final TextView o = (TextView)findViewById(R.id.o);
+                final TextView p = (TextView)findViewById(R.id.p);
+                Score s = list.get(elementobd);
+                o.setText(s.getName());
+                p.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 8 && elementobd<list.size()){
+                final TextView q = (TextView)findViewById(R.id.q);
+                final TextView r = (TextView)findViewById(R.id.r);
+                Score s = list.get(elementobd);
+                q.setText(s.getName());
+                r.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 9 && elementobd<list.size()){
+                final TextView ss = (TextView)findViewById(R.id.s);
+                final TextView t = (TextView)findViewById(R.id.t);
+                Score s = list.get(elementobd);
+                ss.setText(s.getName());
+                t.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 10 && elementobd<list.size()){
+                final TextView u = (TextView)findViewById(R.id.u);
+                final TextView v = (TextView)findViewById(R.id.v);
+                Score s = list.get(elementobd);
+                u.setText(s.getName());
+                v.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 11 && elementobd<list.size()){
+                final TextView w = (TextView)findViewById(R.id.w);
+                final TextView x = (TextView)findViewById(R.id.x);
+                Score s = list.get(elementobd);
+                w.setText(s.getName());
+                x.setText(s.getScore()+"");
+                elementobd++;
+            }if(elementobd == 12 && elementobd<list.size()){
+                final TextView y = (TextView)findViewById(R.id.y);
+                final TextView z = (TextView)findViewById(R.id.z);
+                Score s = list.get(elementobd);
+                y.setText(s.getName());
+                z.setText(s.getScore()+"");
+                elementobd++;
+            }
+        }}
 }

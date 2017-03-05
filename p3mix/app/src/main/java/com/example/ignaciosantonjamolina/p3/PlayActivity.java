@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -127,7 +128,7 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = this.getPreferences(Context.MODE_PRIVATE);
+        prefs = this.getPreferences(Context.MODE_WORLD_READABLE);
 
         /*
         This method is executed when the activity is created to populate the ActionBar with actions
@@ -212,7 +213,7 @@ public class PlayActivity extends AppCompatActivity {
     public void clickQuit(View view) {
 
         amount = prize[qn];
-        addScore(Integer.parseInt(amount));
+        addScore(qn);
         finish();
     }
 
@@ -224,7 +225,7 @@ public class PlayActivity extends AppCompatActivity {
         changeButtonColor(button, Color.GREEN);
         if (qn == prize.length - 1) {
             amount = "1000000";
-            addScore(Integer.parseInt(amount));
+            addScore(qn);
             finish();
         }
     }
@@ -233,7 +234,7 @@ public class PlayActivity extends AppCompatActivity {
         amount = "0";
         if (qn >= 6) amount = "1000";
         if (qn >= 11) amount = "32000";
-        addScore(Integer.parseInt(amount));
+        addScore(qn);
         finish();
     }
 
@@ -323,14 +324,16 @@ int i=0;
     }
 
 
-    public void addScore(int amount){
+    public void addScore(int qn){
         //SettingsActivity.et
         //EditText etName = (EditText)findViewById(R.id.etName);
        // String name = etName.toString();
 
-        String name = prefs.getString("nombre", "Alias");
+        int score = Integer.parseInt(prize[qn]);
+        //String name = prefs.getString("nombre", "Alias");
+        String name = prefs.getString("nombre","Nacho");
         try {
-            PuntuacionesSQLiteHelper.getInstance(this).addScore(name, amount);
+            PuntuacionesSQLiteHelper.getInstance(this).addScore(name, score);
         } catch(SQLiteException e){
             e.printStackTrace();
         }

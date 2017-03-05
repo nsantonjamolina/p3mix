@@ -54,7 +54,7 @@ public class SettingsActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        prefs = this.getPreferences(Context.MODE_PRIVATE);
+        prefs = this.getPreferences(Context.MODE_WORLD_READABLE);
 
         btnBotonSimple = (Button)findViewById(R.id.bAddFriend);
         etAddFriend = (EditText) findViewById(R.id.etAddFriend);
@@ -123,7 +123,6 @@ public class SettingsActivity  extends AppCompatActivity{
             System.out.println("Could not parse " + nfe);
         }
         editor.putInt("hello", myNum);
-        Log.i("Qué hay escrito xml", prefs.getString("nombre", "OTRO"));
         editor.apply();
         editor.commit();
         super.onPause();

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.ignaciosantonjamolina.p3.Score;
 import com.example.ignaciosantonjamolina.p3.ScoreActivity;
@@ -22,7 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class GetScoresAsyncTask extends AsyncTask<Void, Void, Score> {
+public class GetScoresAsyncTask extends AsyncTask<String, Void, Score> {
 
     // Reference to the activity that launched the asynchronous task
     private ScoreActivity parent = null;
@@ -36,15 +37,12 @@ public class GetScoresAsyncTask extends AsyncTask<Void, Void, Score> {
         Access the web service in a background thread
     */
     @Override
-    protected Score doInBackground(Void... params) {
+    protected Score doInBackground(String... nom) {
 
 
         // Check SharedPreference to get the selected HTTP request method
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.parent);
-                        //String httpMethod = sharedPrefs.getString("prefs_http_method", "GET");
-        String httpMethod = "GET";
-        // Used to store the body in case of a POST request
-        String body = null;
+        //String httpMethod = sharedPrefs.getString("prefs_http_method", "GET");
 
         // Build the URI to access the web service at https://wwtbamandroid.appspot.com/rest/friends
         Uri.Builder uriBuilder = new Uri.Builder();
@@ -54,19 +52,18 @@ public class GetScoresAsyncTask extends AsyncTask<Void, Void, Score> {
         uriBuilder.appendPath("highscores");
 
         // Parameters should be included in the URI for GET requests
-
-            uriBuilder.appendQueryParameter("name",
-                    sharedPrefs.getString("nombre", "Paco"));
-            uriBuilder.appendQueryParameter("format", "json");
+        uriBuilder.appendQueryParameter("name", nom[0]);
+        //sharedPrefs.getString("nombre", "Paco"));
+        uriBuilder.appendQueryParameter("format", "json");
 
         Score result = null;
         try {
             // Creates a new URL from the URI
             URL url = new URL(uriBuilder.build().toString());
-
+            Log.d("XXXXXXXXXXXXXXXXXX", url.toString());
             // Get a connection to the web service
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod(httpMethod);
+            connection.setRequestMethod("GET");
             connection.setDoInput(true);
 
             // Process the response if it was successful (HTTP_OK = 200)
@@ -83,6 +80,7 @@ public class GetScoresAsyncTask extends AsyncTask<Void, Void, Score> {
                 }
                 // Close the input channel
                 isr.close();
+                return result;
             }
 
             // Close the connection
@@ -107,7 +105,7 @@ public class GetScoresAsyncTask extends AsyncTask<Void, Void, Score> {
     protected void onPostExecute(Score param) {
         // Quotation received
         if (param != null) {
-            this.parent.gotScore(param.getName(), param.getScore());
+            this.parent.gotScore(param);
         }
         // No response received
         else {

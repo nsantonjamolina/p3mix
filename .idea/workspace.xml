@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4bc52c-5b77-4d43-9b55-763e6f8d93b0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/build.gradle" afterPath="$PROJECT_DIR$/p3mix/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/p3mix/app/src/main/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/PlayActivity.java" afterPath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/PlayActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/PuntuacionesSQLiteHelper.java" afterPath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/PuntuacionesSQLiteHelper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/ScoreActivity.java" afterPath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/ScoreActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/SettingsActivity.java" afterPath="$PROJECT_DIR$/p3mix/app/src/main/java/com/example/ignaciosantonjamolina/p3/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/res/layout/activity_play.xml" afterPath="$PROJECT_DIR$/p3mix/app/src/main/res/layout/activity_play.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/res/layout/activity_score.xml" afterPath="$PROJECT_DIR$/p3mix/app/src/main/res/layout/activity_score.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/res/layout/activity_settings.xml" afterPath="$PROJECT_DIR$/p3mix/app/src/main/res/layout/activity_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/res/menu/score_menu.xml" afterPath="$PROJECT_DIR$/p3mix/app/src/main/res/menu/score_menu.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/res/values/arrays.xml" afterPath="$PROJECT_DIR$/p3mix/app/src/main/res/values/arrays.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p3mix/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/p3mix/app/src/main/res/values/strings.xml" />
     </list>
     <ignored path="p3mix.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -70,13 +61,13 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="ProjectPane" />
       <pane id="AndroidView">
         <subPane />
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">

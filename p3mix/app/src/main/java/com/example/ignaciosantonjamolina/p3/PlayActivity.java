@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -48,6 +49,7 @@ public class PlayActivity extends AppCompatActivity {
     List<Question> questionList;
 
     SharedPreferences prefs;
+    SharedPreferences sharedPreferences;
 
     Button buttonAnswer1;
     Button buttonAnswer2;
@@ -58,6 +60,7 @@ public class PlayActivity extends AppCompatActivity {
     TextView euros;
     TextView numberQ;
     TextView quesionText;
+    PutScoreAsyncTask task;
 
     String amount;  // dinero conseguido
 
@@ -128,7 +131,8 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = this.getPreferences(Context.MODE_WORLD_READABLE);
+        //prefs = this.getPreferences(Context.MODE_WORLD_READABLE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         /*
         This method is executed when the activity is created to populate the ActionBar with actions
@@ -214,6 +218,10 @@ public class PlayActivity extends AppCompatActivity {
 
         amount = prize[qn];
         addScore(qn);
+        Score sc =new Score(sharedPreferences.getString("nombre","juan"),Integer.parseInt(amount));
+        task = new PutScoreAsyncTask();
+        //task.setParent(this);
+        task.execute();
         finish();
     }
 
@@ -226,6 +234,10 @@ public class PlayActivity extends AppCompatActivity {
         if (qn == prize.length - 1) {
             amount = "1000000";
             addScore(qn);
+            Score sc =new Score(sharedPreferences.getString("nombre","juan"),Integer.parseInt(amount));
+            task = new PutScoreAsyncTask();
+            //task.setParent(this);
+            task.execute();
             finish();
         }
     }
@@ -235,6 +247,10 @@ public class PlayActivity extends AppCompatActivity {
         if (qn >= 6) amount = "1000";
         if (qn >= 11) amount = "32000";
         addScore(qn);
+        Score sc =new Score(sharedPreferences.getString("nombre","juan"),Integer.parseInt(amount));
+        task = new PutScoreAsyncTask();
+        //task.setParent(this);
+        task.execute();
         finish();
     }
 
@@ -267,9 +283,6 @@ public class PlayActivity extends AppCompatActivity {
         buttonAnswer3.setVisibility(View.VISIBLE);
         buttonAnswer4.setVisibility(View.VISIBLE);
     }
-
-
-
 
 
 
@@ -331,7 +344,9 @@ int i=0;
 
         int score = Integer.parseInt(prize[qn]);
         //String name = prefs.getString("nombre", "Alias");
-        String name = prefs.getString("nombre","Nacho");
+        //String name = prefs.getString("nombre","Nacho");
+        String name = sharedPreferences.getString("nombre", "Alias");
+        Log.i("NOMBRE", name);
         try {
             PuntuacionesSQLiteHelper.getInstance(this).addScore(name, score);
         } catch(SQLiteException e){

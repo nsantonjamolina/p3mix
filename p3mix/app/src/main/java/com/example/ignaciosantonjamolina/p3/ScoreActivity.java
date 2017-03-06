@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,14 +39,15 @@ public class ScoreActivity  extends AppCompatActivity {
     // Holds reference to the asynchronous task that gets scores from the web service
     GetScoresAsyncTask task;
     SharedPreferences prefs;
+    SharedPreferences sharedPreferences;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        prefs = this.getPreferences(Context.MODE_WORLD_READABLE);
         fillTV();
 
         // Class for accessing an application's resources.
@@ -104,7 +106,7 @@ public class ScoreActivity  extends AppCompatActivity {
                     task =new GetScoresAsyncTask();
                     task.setParent(this);
                     // Start the task
-                    task.execute();
+                    task.execute(sharedPreferences.getString("nombre","Nacho"));
 
                     // Set to false the flag that controls whether to display the action
                     // for getting another quotation until the asynchronous task finishes
@@ -126,16 +128,15 @@ public class ScoreActivity  extends AppCompatActivity {
     }
 
     // Méthod for asynchronous tasks to notify that a new score has been obtained
-    public void gotScore(String name, int score){
+    public void gotScore(Score sc){
         // Update information displayed on the screen: text and author
-        ((TextView) findViewById(R.id.aa)).setText(name);
-        ((TextView) findViewById(R.id.bb)).setText(score);
-        Log.i("CLASE SCORE", name);
-        Log.i("CLASE SCORE", score+"");
-        // Change to true those flags that control whether to display an action for
-        // getting a new quotation and adding the current one to the favourites list
+        if (sc.getName() != null) ((TextView) findViewById(R.id.aa)).setText(sc.getName());
+        ((TextView) findViewById(R.id.bb)).setText(String.format("%d",sc.getScore()));
+        //Log.i("CLASE SCORE", name);
+        //
+        // Log.i("CLASE SCORE", score+"");
+
         newScore = true;
-        //addQuotation = true;
         // Ask the system to rebuild the options of the ActionBar
         supportInvalidateOptionsMenu();
 

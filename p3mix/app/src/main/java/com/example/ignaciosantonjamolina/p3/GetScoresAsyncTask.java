@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -23,7 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class GetScoresAsyncTask extends AsyncTask<String, Void, Score> {
+public class GetScoresAsyncTask extends AsyncTask<String, Void, ScorePojo> {
 
     // Reference to the activity that launched the asynchronous task
     private ScoreActivity parent = null;
@@ -37,7 +38,7 @@ public class GetScoresAsyncTask extends AsyncTask<String, Void, Score> {
         Access the web service in a background thread
     */
     @Override
-    protected Score doInBackground(String... nom) {
+    protected ScorePojo doInBackground(String... nom) {
 
 
         // Check SharedPreference to get the selected HTTP request method
@@ -56,7 +57,8 @@ public class GetScoresAsyncTask extends AsyncTask<String, Void, Score> {
         //sharedPrefs.getString("nombre", "Paco"));
         uriBuilder.appendQueryParameter("format", "json");
 
-        Score result = null;
+        ScorePojo result = null;
+       // Score resultsc = null;
         try {
             // Creates a new URL from the URI
             URL url = new URL(uriBuilder.build().toString());
@@ -68,13 +70,17 @@ public class GetScoresAsyncTask extends AsyncTask<String, Void, Score> {
 
             // Process the response if it was successful (HTTP_OK = 200)
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                Log.i("responde connection", connection.getResponseCode()+"");
                 // Open an input channel to receive the response from the web service
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+                BufferedReader br = new BufferedReader(isr);
+                String lectura = br.readLine();
+                Log.i("LECTURA", lectura);
                 // Create a Gson object through a GsonBuilder to process the response
                 Gson gson = new Gson();
                 try {
                     // Deserializes the JSON response into a Score object
-                    result = gson.fromJson(isr, Score.class);
+                    result = gson.fromJson(lectura, ScorePojo.class);
                 } catch (JsonSyntaxException | JsonIOException e) {
                     e.printStackTrace();
                 }
@@ -102,10 +108,12 @@ public class GetScoresAsyncTask extends AsyncTask<String, Void, Score> {
         Update the interface of activity that launched the asynchronous task
     */
     @Override
-    protected void onPostExecute(Score param) {
-        // Quotation received
+    protected void onPostExecute(ScorePojo param) {
+        // Score received
         if (param != null) {
-            this.parent.gotScore(param);
+            Scores [] sc1 = param.getScores();
+            Score sc = new Score(sc1[0].getName(),Integer.parseInt(sc1[0].getScoring()));
+            this.parent.gotScore(sc);
         }
         // No response received
         else {

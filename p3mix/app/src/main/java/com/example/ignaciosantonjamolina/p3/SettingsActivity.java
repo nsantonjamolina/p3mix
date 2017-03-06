@@ -43,8 +43,6 @@ public class SettingsActivity  extends AppCompatActivity{
 
     SharedPreferences sharedPreferences;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -58,7 +56,7 @@ public class SettingsActivity  extends AppCompatActivity{
 
         //prefs = this.getPreferences(Context.MODE_WORLD_READABLE);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
+        final String name = sharedPreferences.getString("nombre","Nacho");
 
         btnBotonSimple = (Button)findViewById(R.id.bAddFriend);
         etAddFriend = (EditText) findViewById(R.id.etAddFriend);
@@ -66,19 +64,12 @@ public class SettingsActivity  extends AppCompatActivity{
         btnBotonSimple.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 addFriend = etAddFriend.getText().toString();
-                Context context = getApplicationContext();
                 task = new PostFriendsAsyncTask();
-                //task.setParent(this);
-                task.execute(addFriend);
+                task.execute(addFriend, name);
 
             }
         });
     }
-
-
-
-
-
 
     @Override
     protected void onPause() {
@@ -86,7 +77,6 @@ public class SettingsActivity  extends AppCompatActivity{
         EditText etName = (EditText)findViewById(R.id.etName);
         Spinner spinnerset = (Spinner) findViewById(R.id.spinnerset);
         int myNum = 0;
-        //SharedPreferences.Editor editor = prefs.edit();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("nombre", etName.getText().toString());
         try {

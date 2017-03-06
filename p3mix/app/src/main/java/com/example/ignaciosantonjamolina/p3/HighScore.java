@@ -1,4 +1,4 @@
-package labs.sdm.wwtbam.pojo;
+package com.example.ignaciosantonjamolina.p3;
 
 public class HighScore implements Comparable<HighScore>{
 

@@ -221,7 +221,7 @@ public class PlayActivity extends AppCompatActivity {
         Score sc =new Score(sharedPreferences.getString("nombre","juan"),Integer.parseInt(amount));
         task = new PutScoreAsyncTask();
         //task.setParent(this);
-        task.execute();
+        task.execute(sc);
         finish();
     }
 
@@ -237,7 +237,7 @@ public class PlayActivity extends AppCompatActivity {
             Score sc =new Score(sharedPreferences.getString("nombre","juan"),Integer.parseInt(amount));
             task = new PutScoreAsyncTask();
             //task.setParent(this);
-            task.execute();
+            task.execute(sc);
             finish();
         }
     }
@@ -250,7 +250,7 @@ public class PlayActivity extends AppCompatActivity {
         Score sc =new Score(sharedPreferences.getString("nombre","juan"),Integer.parseInt(amount));
         task = new PutScoreAsyncTask();
         //task.setParent(this);
-        task.execute();
+        task.execute(sc);
         finish();
     }
 

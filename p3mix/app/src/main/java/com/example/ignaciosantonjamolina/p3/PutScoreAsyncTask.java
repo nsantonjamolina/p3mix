@@ -30,6 +30,7 @@ public class PutScoreAsyncTask extends AsyncTask<Score, Void, Void> {
 
         String body =  "name="+ score[0].getName() + "&score=" + score[0].getScore() + "&format=json";
 
+
         // Build the URI to access the web service at https://wwtbamandroid.appspot.com/rest/friends
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https");
@@ -50,7 +51,7 @@ public class PutScoreAsyncTask extends AsyncTask<Score, Void, Void> {
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 
             writer.write(body);
-            Log.d("XXXXXXXXXXXXXXXXXXXXXXX", "envío el body");
+            Log.d("XXXXXXXXXXXXXXXXXXXXXXX", "envío el body"+body);
             writer.flush();
             writer.close();
             Log.d("XXXXXXXXXXXXXXXXXXXXXXX", String.format("%d",connection.getResponseCode()));

@@ -130,11 +130,10 @@ public class ScoreActivity  extends AppCompatActivity {
     // Méthod for asynchronous tasks to notify that a new score has been obtained
     public void gotScore(Score sc){
         // Update information displayed on the screen: text and author
-        if (sc.getName() != null) ((TextView) findViewById(R.id.aa)).setText(sc.getName());
-        ((TextView) findViewById(R.id.bb)).setText(String.format("%d",sc.getScore()));
-        //Log.i("CLASE SCORE", name);
-        //
-        // Log.i("CLASE SCORE", score+"");
+        if (sc.getName() != null) {
+            ((TextView) findViewById(R.id.aa)).setText(sc.getName());
+            ((TextView) findViewById(R.id.bb)).setText(String.format("%d",sc.getScore()));
+        }
 
         newScore = true;
         // Ask the system to rebuild the options of the ActionBar

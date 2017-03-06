@@ -30,10 +30,9 @@ public class PostFriendsAsyncTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... friend){
         setParent(this.parent);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(parent.getApplicationContext());
 
         //String body =  "name=juan&friend_name="+friend[0]+"a&format=json"; ;
-        String body =  "name="+sharedPreferences.getString("nombre","Nacho")+"&friend_name="+friend[0]+"a&format=json";
+        String body =  "name="+friend[1]+"&friend_name="+friend[0];
 
         // Build the URI to access the web service at https://wwtbamandroid.appspot.com/rest/friends
         Uri.Builder uriBuilder = new Uri.Builder();
@@ -56,7 +55,7 @@ public class PostFriendsAsyncTask extends AsyncTask<String, Void, Void> {
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 
             writer.write(body);
-            Log.d("XXXXXXXXXXXXXXXXXXXXXXX", "envío el body");
+            Log.d("XXXXXXXXXXXXXXXXXXXXXXX", "envío el body"+body);
             writer.flush();
             writer.close();
             Log.d("XXXXXXXXXXXXXXXXXXXXXXX", String.format("%d",connection.getResponseCode()));

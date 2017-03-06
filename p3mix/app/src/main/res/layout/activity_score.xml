@@ -164,23 +164,23 @@
                     android:layout_height="match_parent" >
 
                     <TableRow android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <TextView android:id="@+id/aa" android:text="Celda 1.1" android:layout_width="match_parent"
+                        <TextView android:id="@+id/aa"  android:layout_width="match_parent"
                             android:layout_height="match_parent" android:layout_weight="1" android:textSize="18sp" />
-                        <TextView android:id="@+id/bb" android:text="Celda 1.2" android:layout_width="match_parent"
+                        <TextView android:id="@+id/bb"  android:layout_width="match_parent"
                             android:layout_height="match_parent" android:layout_weight="1" android:textSize="18sp"/>
                     </TableRow>
 
                     <TableRow android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <TextView android:id="@+id/cc" android:text="Celda 2.1" android:layout_width="match_parent"
+                        <TextView android:id="@+id/cc"  android:layout_width="match_parent"
                             android:layout_height="match_parent"  android:textSize="18sp" android:layout_weight="1"/>
-                        <TextView android:id="@+id/dd" android:text="Celda 2.2" android:layout_width="match_parent"
+                        <TextView android:id="@+id/dd"  android:layout_width="match_parent"
                             android:layout_weight="1" android:layout_height="match_parent"  android:textSize="18sp"/>
                     </TableRow>
 
                     <TableRow android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <TextView android:id="@+id/ee" android:text="Celda 3.1" android:layout_weight="1" android:layout_width="match_parent"
+                        <TextView android:id="@+id/ee"  android:layout_weight="1" android:layout_width="match_parent"
                             android:layout_height="match_parent"  android:textSize="18sp"/>
-                        <TextView android:id="@+id/ff" android:text="Celda 3.2" android:layout_width="match_parent"
+                        <TextView android:id="@+id/ff"  android:layout_width="match_parent"
                             android:layout_height="match_parent"  android:layout_weight="1" android:textSize="18sp"/>
 
                     </TableRow>
